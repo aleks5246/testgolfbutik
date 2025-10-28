@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tapingoolf</title>
+  <style>
+    :root {
+      --primary: #007b55;
+      --dark-primary: #005f40;
+      --bg-light: #f5f9ff;
+      --text: #222;
+      --card: #fff;
+    }
+
+    body.dark {
+      --primary: #00906a;
+      --dark-primary: #003b25;
+      --bg-light: #0f172a;
+      --text: #e5e5e5;
+      --card: #1e293b;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text);
+      scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--dark-primary), var(--primary));
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      transition: background 0.4s;
+    }
+
+    header.scrolled {
+      background: linear-gradient(135deg, var(--dark-primary), var(--primary));
+      opacity: 0.95;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1.logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        text-align: center;
+        background: var(--dark-primary);
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        padding: 15px 0;
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-btn {
+        display: flex;
+      }
+    }
+
+    .hero {
+      text-align: center;
+      padding: 120px 20px;
+      background: linear-gradient(135deg, var(--primary), #00aa88);
+      color: white;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .hero h2 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .hero a {
+      background: white;
+      color: var(--primary);
+      padding: 12px 25px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .hero a:hover {
+      background: #e6f0ff;
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 60px 0;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2.section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--dark-primary);
+      margin-bottom: 40px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      text-align: center;
+    }
+
+    .service {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .service:hover {
+      background: rgba(0,123,85,0.1);
+      transform: translateY(-6px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .service h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    form {
+      background: var(--card);
+      padding: 30px;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: var(--bg-light);
+      color: var(--text);
+      transition: border 0.2s;
+    }
+
+    form input:focus, form textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    form button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background: var(--dark-primary);
+    }
+
+    footer {
+      background: var(--dark-primary);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    #themeToggle {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    #themeToggle:hover {
+      background: #e6f0ff;
+    }
+
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    #scrollTopBtn:hover {
+      background: var(--dark-primary);
+      transform: translateY(-3px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header id="header">
+    <div class="container">
+      <h1 class="logo">Tapingoolf</h1>
+      <nav id="nav">
+        <a href="#about">Om oss</a>
+        <a href="#services">Tjänster</a>
+        <a href="#form">Felanmälan</a>
+        <a href="#contact">Kontakt</a>
+      </nav>
+      <div class="menu-btn" id="menu-btn">
+        <span></span><span></span><span></span>
+      </div>
+      <button id="themeToggle">☀️ / 🌙</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h2>Välkommen till Tapingoolf</h2>
+    <p>Golftejp, utrustning och service – direkt från experten.</p>
+    <a href="#services">Utforska våra produkter</a>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">Om Tapingoolf</h2>
+      <p style="text-align:center; max-width:700px; margin:auto;">
+        Tapingoolf är ett nyetablerat svenskt företag som säljer högkvalitativ golftejp och klubbtillbehör. 
+        Vi erbjuder personlig service, snabba leveranser och produkter noggrant testade av golfare – för golfare.
+      </p>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Våra Produkter</h2>
+      <div class="services">
+        <div class="service"><h3>🏌️‍♂️ Golftejp</h3><p>Högkvalitativ grepptejp för alla klubbor.</p></div>
+        <div class="service"><h3>🛠️ Klubbservice</h3><p>Omgreppning, justering och reparationer.</p></div>
+        <div class="service"><h3>📦 Tillbehör</h3><p>Verktyg, rengöring och smarta hjälpmedel.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="form">
+    <div class="container">
+      <h2 class="section-title">Felanmälan</h2>
+      <form>
+        <input type="text" placeholder="Ditt namn" required>
+        <input type="email" placeholder="Din e-postadress" required>
+        <textarea rows="5" placeholder="Beskriv ditt ärende..." required></textarea>
+        <button type="submit">Skicka</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container contact">
+      <h2 class="section-title">Kontakta Oss</h2>
+      <p>📧 <b>tapingoolf@gmail.com</b></p>
+      <p>📞 <b>+46 70 123 45 67</b></p>
+      <p>📍 Sverige</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Tapingoolf. Alla rättigheter förbehållna.</p>
+  </footer>
+
+  <button id="scrollTopBtn">↑</button>
+
+  <script>
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.2 });
+    sections.forEach(sec => observer.observe(sec));
+
+    const header = document.getElementById("header");
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    window.addEventListener("scroll", () => {
+      header.classList.toggle("scrolled", window.scrollY > 60);
+      scrollTopBtn.style.display = (window.scrollY > 400) ? "block" : "none";
+    });
+
+    scrollTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      themeToggle.textContent = document.body.classList.contains("dark") ? "🌙 Mörkt" : "☀️ Ljust";
+    };
+
+    const menuBtn = document.getElementById("menu-btn");
+    const nav = document.getElementById("nav");
+    menuBtn.onclick = () => nav.classList.toggle("active");
+  </script>
+</body>
+</html>
