@@ -3,400 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tapingoolf</title>
+  <title>Tapingoolf - Golfbutik</title>
   <style>
     :root {
-      --primary: #007b55;
-      --dark-primary: #005f40;
-      --bg-light: #f5f9ff;
+      --primary: #006633;
+      --dark-primary: #004d26;
+      --accent: #c3f584;
+      --bg: #f5f9f6;
       --text: #222;
       --card: #fff;
     }
 
     body.dark {
-      --primary: #00906a;
-      --dark-primary: #003b25;
-      --bg-light: #0f172a;
+      --primary: #00b357;
+      --dark-primary: #006b33;
+      --accent: #8fffba;
+      --bg: #0f172a;
       --text: #e5e5e5;
       --card: #1e293b;
     }
 
     body {
       margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-light);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      scroll-behavior: smooth;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1100px;
-      margin: auto;
+      transition: 0.3s;
     }
 
     header {
       background: linear-gradient(135deg, var(--dark-primary), var(--primary));
       color: white;
       padding: 15px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       position: sticky;
       top: 0;
-      z-index: 20;
-      transition: background 0.4s;
+      z-index: 50;
     }
 
-    header.scrolled {
-      background: linear-gradient(135deg, var(--dark-primary), var(--primary));
-      opacity: 0.95;
-    }
-
-    header .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    h1.logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-      letter-spacing: 1px;
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
     }
 
     nav {
-      display: flex;
-      gap: 20px;
+      margin-top: 10px;
     }
 
     nav a {
       color: white;
       text-decoration: none;
+      margin: 0 10px;
       font-weight: 500;
       position: relative;
-      transition: all 0.3s;
-    }
-
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -3px;
-      width: 0%;
-      height: 2px;
-      background: white;
-      transition: width 0.3s;
     }
 
     nav a:hover::after {
       width: 100%;
     }
 
-    .menu-btn {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .menu-btn span {
-      width: 25px;
-      height: 3px;
-      background: white;
-      margin: 4px 0;
-      border-radius: 2px;
-    }
-
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-        flex-direction: column;
-        text-align: center;
-        background: var(--dark-primary);
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 100%;
-        padding: 15px 0;
-      }
-      nav.active {
-        display: flex;
-      }
-      .menu-btn {
-        display: flex;
-      }
-    }
-
     .hero {
+      background: url('https://images.unsplash.com/photo-1508847154043-be5407fcaa5a?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+      color: white;
       text-align: center;
       padding: 120px 20px;
-      background: linear-gradient(135deg, var(--primary), #00aa88);
-      color: white;
-      animation: fadeIn 1.5s ease-in-out;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
     }
 
     .hero h2 {
       font-size: 2.8rem;
-      margin-bottom: 15px;
-      letter-spacing: 1px;
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      margin-bottom: 30px;
-    }
-
-    .hero a {
-      background: white;
-      color: var(--primary);
-      padding: 12px 25px;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: all 0.3s;
-    }
-
-    .hero a:hover {
-      background: #e6f0ff;
-      transform: translateY(-2px);
-    }
-
-    section {
-      padding: 60px 0;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s ease-out;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    h2.section-title {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--dark-primary);
-      margin-bottom: 40px;
-    }
-
-    .services {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      text-align: center;
-    }
-
-    .service {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .service:hover {
-      background: rgba(0,123,85,0.1);
-      transform: translateY(-6px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-
-    .service h3 {
-      color: var(--primary);
       margin-bottom: 10px;
     }
 
-    form {
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 40px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .product {
       background: var(--card);
-      padding: 30px;
-      max-width: 500px;
-      margin: 0 auto;
       border-radius: 10px;
+      overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: 0.3s;
     }
 
-    form input, form textarea {
+    .product:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .product img {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-      background: var(--bg-light);
-      color: var(--text);
-      transition: border 0.2s;
+      height: 200px;
+      object-fit: cover;
     }
 
-    form input:focus, form textarea:focus {
-      border-color: var(--primary);
-      outline: none;
+    .product-info {
+      padding: 15px;
+      text-align: center;
     }
 
-    form button {
+    .product-info h3 {
+      margin: 5px 0;
+      color: var(--primary);
+    }
+
+    .product-info button {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .product-info button:hover {
+      background: var(--dark-primary);
+    }
+
+    .cart {
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    .cart-total {
+      text-align: right;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+
+    .swish-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 12px 20px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s;
+      transition: 0.3s;
+      margin-top: 15px;
     }
 
-    form button:hover {
-      background: var(--dark-primary);
+    .swish-btn:hover {
+      background: #a9f273;
     }
 
     footer {
       background: var(--dark-primary);
       color: white;
       text-align: center;
-      padding: 20px 0;
-      font-size: 0.9rem;
+      padding: 20px;
+      margin-top: 40px;
     }
 
     #themeToggle {
-      background: white;
-      color: var(--primary);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-
-    #themeToggle:hover {
-      background: #e6f0ff;
-    }
-
-    #scrollTopBtn {
-      display: none;
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--primary);
-      color: white;
+      right: 15px;
+      bottom: 15px;
+      background: var(--accent);
       border: none;
       border-radius: 50%;
       width: 45px;
       height: 45px;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    #scrollTopBtn:hover {
-      background: var(--dark-primary);
-      transform: translateY(-3px);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
-  <header id="header">
-    <div class="container">
-      <h1 class="logo">Tapingoolf</h1>
-      <nav id="nav">
-        <a href="#about">Om oss</a>
-        <a href="#services">Tjänster</a>
-        <a href="#form">Felanmälan</a>
-        <a href="#contact">Kontakt</a>
-      </nav>
-      <div class="menu-btn" id="menu-btn">
-        <span></span><span></span><span></span>
-      </div>
-      <button id="themeToggle">☀️ / 🌙</button>
-    </div>
+  <header>
+    <h1>Tapingoolf</h1>
+    <nav>
+      <a href="#products">Produkter</a>
+      <a href="#about">Om Oss</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
   </header>
 
   <section class="hero">
-    <h2>Välkommen till Tapingoolf</h2>
-    <p>Golftejp, utrustning och service – direkt från experten.</p>
-    <a href="#services">Utforska våra produkter</a>
+    <div class="hero-content">
+      <h2>Välkommen till Tapingoolf</h2>
+      <p>Din golfbutik online – klubbor, tillbehör och stil på ett ställe.</p>
+    </div>
+  </section>
+
+  <section id="products">
+    <h2>Våra Produkter</h2>
+    <div class="products" id="product-list">
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1588854337221-4b42c3cdd1a4?auto=format&fit=crop&w=800&q=80" alt="Golfklubba">
+        <div class="product-info">
+          <h3>Driver Pro X</h3>
+          <p>3 499 kr</p>
+          <button onclick="addToCart('Driver Pro X', 3499)">Lägg till i kundvagn</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1611162616305-7b61b47f07ab?auto=format&fit=crop&w=800&q=80" alt="Järnklubba">
+        <div class="product-info">
+          <h3>IronMaster 7</h3>
+          <p>1 999 kr</p>
+          <button onclick="addToCart('IronMaster 7', 1999)">Lägg till i kundvagn</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1600170311833-9b52b6b14c35?auto=format&fit=crop&w=800&q=80" alt="Golfboll">
+        <div class="product-info">
+          <h3>SoftSpin Bollar (12-pack)</h3>
+          <p>499 kr</p>
+          <button onclick="addToCart('SoftSpin Bollar', 499)">Lägg till i kundvagn</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart" id="cart">
+      <h3>Kundvagn</h3>
+      <div id="cart-items"></div>
+      <div class="cart-total" id="cart-total">Totalt: 0 kr</div>
+      <button class="swish-btn" onclick="simulateSwish()">Betala med Swish</button>
+    </div>
   </section>
 
   <section id="about">
-    <div class="container">
-      <h2 class="section-title">Om Tapingoolf</h2>
-      <p style="text-align:center; max-width:700px; margin:auto;">
-        Tapingoolf är ett nyetablerat svenskt företag som säljer högkvalitativ golftejp och klubbtillbehör. 
-        Vi erbjuder personlig service, snabba leveranser och produkter noggrant testade av golfare – för golfare.
-      </p>
-    </div>
-  </section>
-
-  <section id="services">
-    <div class="container">
-      <h2 class="section-title">Våra Produkter</h2>
-      <div class="services">
-        <div class="service"><h3>🏌️‍♂️ Golftejp</h3><p>Högkvalitativ grepptejp för alla klubbor.</p></div>
-        <div class="service"><h3>🛠️ Klubbservice</h3><p>Omgreppning, justering och reparationer.</p></div>
-        <div class="service"><h3>📦 Tillbehör</h3><p>Verktyg, rengöring och smarta hjälpmedel.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="form">
-    <div class="container">
-      <h2 class="section-title">Felanmälan</h2>
-      <form>
-        <input type="text" placeholder="Ditt namn" required>
-        <input type="email" placeholder="Din e-postadress" required>
-        <textarea rows="5" placeholder="Beskriv ditt ärende..." required></textarea>
-        <button type="submit">Skicka</button>
-      </form>
-    </div>
+    <h2>Om Oss</h2>
+    <p style="text-align:center; max-width:700px; margin:auto;">
+      Tapingoolf startades 2025 med målet att göra golfutrustning tillgänglig för alla.
+      Vi erbjuder moderna produkter, personlig service och snabba leveranser.
+    </p>
   </section>
 
   <section id="contact">
-    <div class="container contact">
-      <h2 class="section-title">Kontakta Oss</h2>
-      <p>📧 <b>tapingoolf@gmail.com</b></p>
-      <p>📞 <b>+46 70 123 45 67</b></p>
-      <p>📍 Sverige</p>
-    </div>
+    <h2>Kontakt</h2>
+    <p style="text-align:center;">📞 070-123 45 67</p>
+    <p style="text-align:center;">📧 info@tapingoolf.se</p>
+    <p style="text-align:center;">📍 Stockholm, Sverige</p>
   </section>
 
   <footer>
     <p>© 2025 Tapingoolf. Alla rättigheter förbehållna.</p>
   </footer>
 
-  <button id="scrollTopBtn">↑</button>
+  <button id="themeToggle">☀️</button>
 
   <script>
-    const sections = document.querySelectorAll("section");
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("visible");
+    let cart = [];
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById("cart-items");
+      const cartTotal = document.getElementById("cart-total");
+      cartItems.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, i) => {
+        total += item.price;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${item.name}</span>
+            <span>${item.price} kr <button onclick="removeItem(${i})">❌</button></span>
+          </div>`;
       });
-    }, { threshold: 0.2 });
-    sections.forEach(sec => observer.observe(sec));
+      cartTotal.textContent = "Totalt: " + total + " kr";
+    }
 
-    const header = document.getElementById("header");
-    const scrollTopBtn = document.getElementById("scrollTopBtn");
-    window.addEventListener("scroll", () => {
-      header.classList.toggle("scrolled", window.scrollY > 60);
-      scrollTopBtn.style.display = (window.scrollY > 400) ? "block" : "none";
-    });
+    function removeItem(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
 
-    scrollTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+    function simulateSwish() {
+      if (cart.length === 0) return alert("Din kundvagn är tom!");
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      alert(`Swish-betalning simulerad!\nBelopp: ${total} kr\nTack för ditt köp!`);
+      cart = [];
+      updateCart();
+    }
 
     const themeToggle = document.getElementById("themeToggle");
     themeToggle.onclick = () => {
       document.body.classList.toggle("dark");
-      themeToggle.textContent = document.body.classList.contains("dark") ? "🌙 Mörkt" : "☀️ Ljust";
+      themeToggle.textContent = document.body.classList.contains("dark") ? "🌙" : "☀️";
     };
-
-    const menuBtn = document.getElementById("menu-btn");
-    const nav = document.getElementById("nav");
-    menuBtn.onclick = () => nav.classList.toggle("active");
   </script>
 </body>
 </html>
