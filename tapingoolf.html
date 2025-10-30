@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tapingoolf - Din Golfbutik</title>
+  <meta name="description" content="Tapingoolf - premiumklubbor, moderna tillbehör och passion för spelet. Butik i Örebro."/>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary:#006633;
+      --dark-primary:#004d26;
+      --accent:#b9f36b;
+      --bg:#f5f9f6;
+      --card:#fff;
+      --text:#222;
+      --muted:#6b7280;
+      --radius:14px;
+      --container:1100px;
+      --glass: rgba(255,255,255,0.6);
+      --glass-border: rgba(255,255,255,0.14);
+      --transition: 300ms cubic-bezier(.2,.9,.3,1);
+      --shadow-sm: 0 6px 18px rgba(16,24,40,.06);
+      --shadow-md: 0 12px 30px rgba(16,24,40,.12);
+    }
+    body.dark{
+      --primary:#00b357;
+      --dark-primary:#006b33;
+      --accent:#8fffba;
+      --bg:#0b1220;
+      --card:#0f1720;
+      --text:#e6eef0;
+      --muted:#9aa6b2;
+      --glass: rgba(0,0,0,0.35);
+      --glass-border: rgba(255,255,255,0.04);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, "Segoe UI", Tahoma, sans-serif;
+      background:linear-gradient(180deg, var(--bg), rgba(0,0,0,0));
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition:background .25s,color .25s;
+      min-height:100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    header{
+      background:linear-gradient(135deg,var(--dark-primary),var(--primary));
+      color:white;
+      position:sticky;
+      top:0;
+      z-index:60;
+      box-shadow:0 6px 18px rgba(2,6,23,.18);
+      transition:height .25s ease, padding .25s ease, box-shadow .25s ease;
+    }
+    header.shrink{
+      box-shadow:0 10px 26px rgba(2,6,23,.2);
+    }
+    .topbar{
+      max-width:var(--container);
+      margin:0 auto;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      padding:16px 20px;
+      justify-content:space-between;
+      transition:padding .25s ease;
+    }
+    header.shrink .topbar{ padding:10px 18px }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .brand h1{
+      margin:0;
+      font-size:1.25rem;
+      letter-spacing:0.6px;
+      font-weight:800;
+    }
+    .brand .tag{
+      font-size:0.85rem;
+      color:rgba(255,255,255,.92);
+      margin-left:8px;
+      font-weight:600;
+      opacity:.95;
+    }
+
+    nav{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    nav a{
+      color:white;
+      text-decoration:none;
+      font-weight:600;
+      font-size:0.95rem;
+      opacity:.98;
+      padding:8px 10px;
+      border-radius:8px;
+      transition:background var(--transition), transform var(--transition);
+    }
+    nav a:focus, nav a:hover{ background: rgba(255,255,255,.06); transform:translateY(-2px) }
+
+    .header-actions{ display:flex; gap:12px; align-items:center }
+
+    .menu-toggle{
+      display:none;
+      background:transparent;
+      border:1px solid rgba(255,255,255,.12);
+      color:white;
+      padding:8px;
+      border-radius:10px;
+      font-size:16px;
+      cursor:pointer;
+      transition:transform var(--transition);
+    }
+    .menu-toggle:active{ transform:scale(.98) }
+
+    .hero{
+      position:relative;
+      color:white;
+      text-align:center;
+      padding:110px 20px 80px;
+      overflow:hidden;
+    }
+    .hero-bg{
+      position: absolute;
+      inset: 0;
+      background-image: url("https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1950&q=80");
+      background-position:center;
+      background-size:cover;
+      transform: translateZ(0);
+      will-change: transform;
+      z-index:0;
+      filter: contrast(.95) saturate(1.02) brightness(.94);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45));
+      z-index:1;
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:2;
+      max-width:var(--container);
+      margin:0 auto;
+      padding:0 20px;
+      transition:transform .45s cubic-bezier(.2,.9,.3,1);
+    }
+    .hero h2{
+      font-size:2.25rem;
+      margin:0 0 12px;
+      letter-spacing:.3px;
+      line-height:1.05;
+      transform: translateY(0);
+      transition: transform .6s ease, opacity .6s ease;
+    }
+    .hero p{
+      margin:0 auto;
+      max-width:720px;
+      color:rgba(255,255,255,.95);
+      font-size:1.05rem;
+      opacity:.95;
+    }
+
+    .hero-cta{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:0;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+      transition: transform var(--transition), box-shadow var(--transition), opacity .12s;
+      box-shadow: var(--shadow-sm);
+      background:linear-gradient(180deg,var(--primary),var(--dark-primary));
+      color:white;
+    }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,.06);
+      font-weight:700;
+      box-shadow:none;
+    }
+    .btn:active{ transform:translateY(1px) }
+
+    main{
+      max-width:var(--container);
+      margin:36px auto;
+      padding:18px 20px;
+    }
+
+    .section-title{
+      text-align:center;
+      color:var(--primary);
+      margin-bottom:18px;
+      font-size:1.25rem;
+      font-weight:800;
+    }
+
+    .controls{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .controls input[type="search"], .controls select{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(15,23,42,.06);
+      min-width:180px;
+      font-size:0.95rem;
+      background:var(--card);
+      color:var(--text);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .controls input[type="search"]:focus, .controls select:focus{
+      outline: none;
+      box-shadow: 0 8px 24px rgba(2,6,23,.06);
+      transform: translateY(-2px);
+    }
+    .controls input[type="search"]{ width:300px; max-width:80vw }
+
+    .products{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+      align-items:start;
+    }
+    .product{
+      background:var(--card);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow-sm);
+      transition:transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .25s;
+      border:1px solid rgba(0,0,0,0.03);
+    }
+    .product:hover{
+      transform:translateY(-10px);
+      box-shadow:var(--shadow-md);
+    }
+    .product .media{
+      width:100%;
+      height:200px;
+      overflow:hidden;
+      background:#eee;
+      position:relative;
+    }
+    .product img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s; }
+    .product:hover img{ transform:scale(1.03) }
+    .product .info{ padding:14px; text-align:center }
+    .product h3{ margin:6px 0; color:var(--primary); font-size:1rem; font-weight:800 }
+    .product p.price{ margin:6px 0; color:var(--muted); font-weight:800 }
+    .product .product-actions{ display:flex; gap:8px; justify-content:center; margin-top:8px; align-items:center }
+    .product .ghost{
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:8px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .cart{
+      margin-top:26px;
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow-sm);
+    }
+    .cart h3{ margin:0 0 10px 0; font-size:1.05rem }
+    .cart-items{ display:flex; flex-direction:column; gap:8px; max-height:260px; overflow:auto; padding-right:6px }
+    .cart-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:8px 6px;
+      border-radius:8px;
+      transition:background var(--transition);
+    }
+    .cart-item:hover{ background: rgba(0,0,0,0.02) }
+    .cart-total{ text-align:right; margin-top:10px; font-weight:800 }
+
+    .swish-btn{
+      background:white;
+      color:#000;
+      border:none;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:900;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    }
+
+    .header-cart{
+      background:white;
+      color:#000;
+      padding:8px 12px;
+      border-radius:12px;
+      font-weight:800;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .gallery{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:20px }
+    .gallery img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      border-radius:12px;
+      display:block;
+      box-shadow:var(--shadow-sm);
+      transition: transform .45s;
+    }
+    .gallery img:hover{ transform:translateY(-6px) }
+
+    .reviews{ text-align:center; margin-top:28px }
+    .reviews p{ color:var(--muted) }
+
+    .contact-grid{ display:grid; grid-template-columns:1fr 420px; gap:18px; align-items:start; margin-top:24px }
+    .contact-card{ background:var(--card); padding:18px; border-radius:12px; box-shadow:var(--shadow-sm) }
+    .map-embed{ width:100%; height:100%; min-height:260px; border-radius:10px; overflow:hidden; border:0 }
+
+    footer{
+      margin-top:40px;
+      background:linear-gradient(90deg,var(--dark-primary),var(--primary));
+      color:white;
+      padding:28px 18px;
+      text-align:center;
+      border-top-left-radius:24px;
+      border-top-right-radius:24px;
+    }
+    footer a{ color:var(--accent); text-decoration:none; font-weight:700 }
+
+    .notification{
+      position:fixed; right:18px; top:18px;
+      background:var(--primary); color:white; padding:10px 14px; border-radius:10px; display:none; z-index:80;
+      box-shadow:0 8px 26px rgba(0,0,0,.28);
+    }
+
+    .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); justify-content:center; align-items:center; z-index:90 }
+    .popup{ background:var(--card); padding:18px; border-radius:12px; width:min(520px,94%); box-shadow:var(--shadow-md) }
+    .popup input, .popup textarea, .popup select{ width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #ddd; font-size:0.95rem; background:transparent; color:var(--text) }
+    .popup .actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px }
+
+    @media (max-width:1000px){
+      .products{ grid-template-columns:repeat(2,1fr) }
+      .contact-grid{ grid-template-columns:1fr; }
+      .gallery img{ height:180px }
+      .hero{ padding:80px 18px 60px }
+      .hero h2{ font-size:1.9rem }
+      .hero p{ font-size:0.95rem }
+    }
+    @media (max-width:640px){
+      .products{ grid-template-columns:1fr }
+      .controls input[type="search"]{ width:100% }
+      nav{ display:none }
+      .menu-toggle{ display:inline-flex }
+      .topbar{ padding:12px 12px }
+      .brand h1{ font-size:1.05rem }
+      .hero{ padding:48px 12px }
+      .hero h2{ font-size:1.3rem }
+      .gallery{ grid-template-columns:1fr }
+      .product .media{ height:180px }
+      .hero-bg{ background-position: center 30% }
+    }
+
+    .fade-in{
+      opacity:0;
+      transform: translateY(18px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+    .inview{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    #toTop{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:80;
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 26px rgba(2,6,23,.15);
+      background:linear-gradient(180deg,var(--primary),var(--dark-primary));
+      color:white;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    :focus{ outline: none; }
+    .focus-ring:focus-visible{ box-shadow: 0 0 0 4px rgba(0,128,64,.14); border-radius:8px; outline: none; }
+
+  </style>
+</head>
+<body>
+  <header id="siteHeader">
+    <div class="topbar">
+      <div class="brand" style="align-items:center">
+        <button class="menu-toggle focus-ring" id="menuToggle" aria-label="Meny" aria-expanded="false">☰</button>
+        <h1>Tapingoolf</h1>
+        <div class="tag">Din Golfbutik — Örebro</div>
+      </div>
+
+      <nav id="mainNav" aria-label="Huvudnavigation">
+        <a href="#products" class="focus-ring">Produkter</a>
+        <a href="omoss.html" class="focus-ring">Om oss</a>
+        <a href="#reviews" class="focus-ring">Recensioner</a>
+        <a href="#contact" class="focus-ring">Kontakt</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="header-cart">
+          🛒 <span>Kundvagn:</span> <span id="cartCount">0</span>
+        </div>
+        <button id="themeToggle" aria-label="Växla tema" class="focus-ring" style="background:transparent;border:1px solid rgba(255,255,255,.12);color:white;padding:8px;border-radius:10px">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-inner" id="heroInner">
+      <h2 id="heroTitle">Upplev golf på riktigt — premiumutrustning & lokal service</h2>
+      <p>Premiumklubbor, moderna tillbehör och passion för spelet. Hitta rätt utrustning och förbered dig för bästa runda — både online och i vår fysiska butik.</p>
+      <div class="hero-cta" style="margin-top:18px">
+        <button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Utforska produkter</button>
+        <button class="btn secondary" onclick="openReviewPopup()">Lämna recension</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="products" aria-labelledby="productsTitle" class="fade-in">
+      <h3 class="section-title" id="productsTitle">Våra produkter</h3>
+
+      <div class="controls" role="search" aria-label="Produkter sök och sortering">
+        <input type="search" id="search" placeholder="🔍 Sök produkter..." aria-label="Sök produkter">
+        <select id="sort" aria-label="Sortera produkter">
+          <option value="">Sortera...</option>
+          <option value="name">Namn (A–Ö)</option>
+          <option value="priceLow">Pris (stigande)</option>
+          <option value="priceHigh">Pris (fallande)</option>
+        </select>
+      </div>
+
+      <div class="products" id="productList" aria-live="polite"></div>
+
+      <div class="cart" aria-labelledby="cartTitle">
+        <h3 id="cartTitle">Kundvagn</h3>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-total" id="cartTotal">Totalt: 0 kr</div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px">
+          <button class="swish-btn" id="payBtn">Betala med Swish</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="reviews fade-in" aria-labelledby="reviewsTitle">
+      <h3 class="section-title" id="reviewsTitle">Kundrecensioner</h3>
+      <p id="reviewCount">⭐ Inga recensioner ännu – var den första att dela din upplevelse!</p>
+      <div style="display:flex; gap:10px; justify-content:center; margin-top:12px">
+        <button class="btn" onclick="openReviewPopup()">Lämna recension</button>
+        <button class="btn secondary" onclick="showAllReviews()">Visa recensioner</button>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:34px" class="fade-in">
+      <h3 class="section-title">Kontakt & butik</h3>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h4 style="margin-top:0">Hitta till oss</h4>
+          <p style="margin:8px 0"><strong>Adress:</strong> Storbackavägen 19, 702 42 Örebro</p>
+          <p style="margin:8px 0"><strong>Telefon:</strong> <a href="tel:0721955603">072-195 56 03</a></p>
+          <p style="margin:8px 0"><strong>Öppettider:</strong> Öppet dygnet runt</p>
+          <p style="margin:8px 0">Följ oss: <a href="https://www.instagram.com/tapingoolf" target="_blank" rel="noopener">Instagram @tapingoolf</a></p>
+        </div>
+
+        <div style="border-radius:12px; overflow:hidden;">
+          <iframe class="map-embed"
+            src="https://www.google.com/maps?q=Storbackav%C3%A4gen+19+702+42+%C3%96rebro&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Karta till Tapingoolf"></iframe>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div style="max-width:var(--container); margin:0 auto; padding:8px 20px">
+      <div style="margin-bottom:8px">© 2025 Tapingoolf. Alla rättigheter förbehållna.</div>
+      <div>Följ oss på <a href="https://www.instagram.com/tapingoolf" target="_blank" rel="noopener">Instagram @tapingoolf</a></div>
+    </div>
+  </footer>
+
+  <div class="notification" id="notification" role="status" aria-live="polite"></div>
+
+  <div class="overlay" id="overlay">
+    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <h4 id="popupTitle">Lämna en recension</h4>
+      <input id="reviewName" placeholder="Ditt namn (obligatoriskt)">
+      <select id="reviewStars" aria-label="Antal stjärnor">
+        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+        <option value="4">⭐️⭐️⭐️⭐️</option>
+        <option value="3">⭐️⭐️⭐️</option>
+        <option value="2">⭐️⭐️</option>
+        <option value="1">⭐️</option>
+      </select>
+      <textarea id="reviewText" rows="4" placeholder="Din recension... (obligatoriskt)"></textarea>
+      <div class="actions">
+        <button onclick="closeReviewPopup()" style="background:#efefef;padding:8px 12px;border-radius:8px;border:none">Avbryt</button>
+        <button onclick="submitReview()" style="background:var(--primary); color:white; padding:8px 12px; border-radius:8px; border:none">Skicka</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="reviewsOverlay" style="display:none; align-items:flex-start; overflow:auto; padding:30px 12px">
+    <div class="popup" style="max-width:760px;">
+      <h4>Recensioner</h4>
+      <div id="reviewsList" style="max-height:60vh; overflow:auto; margin-top:8px"></div>
+      <div style="display:flex; justify-content:flex-end; margin-top:12px">
+        <button onclick="document.getElementById('reviewsOverlay').style.display='none'" style="padding:8px 12px;border-radius:8px;border:none;background:#efefef">Stäng</button>
+      </div>
+    </div>
+  </div>
+
+  <button id="toTop" title="Till toppen" aria-label="Till toppen">↑</button>
+
+  <script>
+    const PRODUCTS = [
+      { id:1, name:"Pro Drive Elite", price:3499, img:"https://images.unsplash.com/photo-1579829366248-204fe8413e6a?auto=format&fit=crop&w=1400&q=80" },
+      { id:2, name:"IronMaster 7", price:1999, img:"https://images.unsplash.com/photo-1603570811565-d2516ec8c73f?auto=format&fit=crop&w=1400&q=80" },
+      { id:3, name:"SoftSpin Bollar (12-pack)", price:499, img:"https://images.unsplash.com/photo-1588854337221-4b42c3cdd1a4?auto=format&fit=crop&w=1400&q=80" },
+      { id:4, name:"Precision Putter", price:1299, img:"https://images.unsplash.com/photo-1600959907703-3a1df2c72854?auto=format&fit=crop&w=1400&q=80" },
+      { id:5, name:"Fairway Pro Glove", price:299, img:"https://images.unsplash.com/photo-1604159381999-9d1e8f5da1b9?auto=format&fit=crop&w=1400&q=80" }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('tapingoolf_cart')) || [];
+    let reviews = JSON.parse(localStorage.getItem('tapingoolf_reviews')) || [];
+
+    const productListEl = document.getElementById('productList');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const cartCountEl = document.getElementById('cartCount');
+    const notificationEl = document.getElementById('notification');
+    const searchEl = document.getElementById('search');
+    const sortEl = document.getElementById('sort');
+
+    function renderProducts(items = PRODUCTS) {
+      productListEl.innerHTML = '';
+      items.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product fade-in';
+        div.innerHTML = `
+          <div class="media">
+            <img src="${p.img}" alt="${escapeHtml(p.name)}" loading="lazy">
+          </div>
+          <div class="info">
+            <h3>${escapeHtml(p.name)}</h3>
+            <p class="price">${p.price.toLocaleString('sv-SE')} kr</p>
+            <div class="product-actions">
+              <button class="btn" aria-label="Lägg till ${escapeHtml(p.name)}" onclick="addToCart(${p.id})">Lägg till i kundvagn</button>
+              <button class="ghost" aria-label="Mer info ${escapeHtml(p.name)}" onclick="showProductInfo(${p.id})">Info</button>
+            </div>
+          </div>
+        `;
+        productListEl.appendChild(div);
+      });
+      hookImageErrors();
+      observeFadeIns();
+    }
+
+    function showProductInfo(id){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) return;
+      alert(`${p.name}\nPris: ${p.price.toLocaleString('sv-SE')} kr\n\nBeskrivning: En högkvalitativ produkt för ditt golfspel.`);
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
+    }
+
+    function addToCart(productId){
+      const prod = PRODUCTS.find(p=>p.id===productId);
+      if(!prod) return;
+      cart.push({ id:prod.id, name:prod.name, price:prod.price });
+      saveCart();
+      updateCart();
+      showNotification(`${prod.name} lades till i kundvagnen`);
+    }
+
+    function removeFromCart(index){
+      cart.splice(index,1);
+      saveCart();
+      updateCart();
+    }
+
+    function saveCart(){
+      localStorage.setItem('tapingoolf_cart', JSON.stringify(cart));
+    }
+
+    function updateCart(){
+      cartItemsEl.innerHTML = '';
+      let sum = 0;
+      cart.forEach((it,i)=>{
+        sum += it.price;
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `<div style="max-width:70%">${escapeHtml(it.name)}</div>
+                         <div>${it.price.toLocaleString('sv-SE')} kr <button style="background:transparent;border:none;cursor:pointer;margin-left:8px" onclick="removeFromCart(${i})" aria-label="Ta bort">❌</button></div>`;
+        cartItemsEl.appendChild(row);
+      });
+      cartTotalEl.textContent = 'Totalt: ' + sum.toLocaleString('sv-SE') + ' kr';
+      cartCountEl.textContent = cart.length;
+    }
+
+    document.getElementById('payBtn').addEventListener('click', ()=> {
+      if(cart.length===0){ alert('Din kundvagn är tom!'); return }
+      const sum = cart.reduce((a,b)=>a+b.price,0);
+      alert(`Swish-betalning simulerad!\nBelopp: ${sum.toLocaleString('sv-SE')} kr\nTack för ditt köp!`);
+      cart = [];
+      saveCart();
+      updateCart();
+    });
+
+    let notifTimer = null;
+    function showNotification(msg, time=2200){
+      if(notifTimer) clearTimeout(notifTimer);
+      notificationEl.textContent = msg;
+      notificationEl.style.display = 'block';
+      notifTimer = setTimeout(()=>{ notificationEl.style.display='none' }, time);
+    }
+
+    searchEl.addEventListener('input', applyFilters);
+    sortEl.addEventListener('change', applyFilters);
+
+    function applyFilters(){
+      const q = (searchEl.value || '').trim().toLowerCase();
+      let filtered = PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
+      const s = sortEl.value;
+      if(s==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+      if(s==='priceLow') filtered.sort((a,b)=>a.price - b.price);
+      if(s==='priceHigh') filtered.sort((a,b)=>b.price - a.price);
+      renderProducts(filtered);
+    }
+
+    function openReviewPopup(){ document.getElementById('overlay').style.display='flex' }
+    function closeReviewPopup(){ document.getElementById('overlay').style.display='none' }
+
+    function submitReview(){
+      const name = document.getElementById('reviewName').value.trim();
+      const stars = document.getElementById('reviewStars').value;
+      const text = document.getElementById('reviewText').value.trim();
+      if(!name || !text){ alert('Fyll i namn och text i recensionen.'); return }
+      reviews.push({ name, stars: Number(stars), text, date:new Date().toISOString() });
+      localStorage.setItem('tapingoolf_reviews', JSON.stringify(reviews));
+      closeReviewPopup();
+      updateReviewCount();
+      showNotification('Tack för din recension!');
+      document.getElementById('reviewName').value='';
+      document.getElementById('reviewText').value='';
+      document.getElementById('reviewStars').value='5';
+    }
+
+    function updateReviewCount(){
+      const el = document.getElementById('reviewCount');
+      if(reviews.length===0){
+        el.textContent = '⭐ Inga recensioner ännu – var den första att dela din upplevelse!';
+      } else {
+        const avg = (reviews.reduce((a,b)=>a+b.stars,0)/reviews.length).toFixed(1);
+        el.textContent = `⭐ ${avg} i snitt — ${reviews.length} recension${reviews.length>1?'er':''}`;
+      }
+    }
+
+    function showAllReviews(){
+      const overlay = document.getElementById('reviewsOverlay');
+      const list = document.getElementById('reviewsList');
+      list.innerHTML = '';
+      if(reviews.length===0){
+        list.innerHTML = '<p style="color:var(--muted)">Inga recensioner ännu.</p>';
+      } else {
+        reviews.slice().reverse().forEach(r=>{
+          const row = document.createElement('div');
+          row.style.borderBottom='1px solid #eee';
+          row.style.padding='10px 0';
+          row.innerHTML = `<strong>${escapeHtml(r.name)}</strong> &nbsp;<span style="color:var(--muted)">(${new Date(r.date).toLocaleString()})</span>
+            <div style="margin-top:6px">⭐ ${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+            <div style="margin-top:6px;color:var(--muted)">${escapeHtml(r.text)}</div>`;
+          list.appendChild(row);
+        });
+      }
+      overlay.style.display='flex';
+    }
+
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.getElementById('mainNav');
+
+    menuToggle.addEventListener('click', ()=> {
+      const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', String(!expanded));
+      if (!expanded) {
+        mainNav.style.display = 'flex';
+        mainNav.style.flexDirection = 'column';
+        mainNav.style.position = 'absolute';
+        mainNav.style.right = '12px';
+        mainNav.style.top = '64px';
+        mainNav.style.background = 'linear-gradient(135deg,var(--dark-primary),var(--primary))';
+        mainNav.style.padding = '12px';
+        mainNav.style.borderRadius = '12px';
+        mainNav.style.zIndex = 120;
+        mainNav.style.minWidth = '180px';
+      } else {
+        mainNav.style.display = '';
+        mainNav.style.position = '';
+        mainNav.style.background = '';
+      }
+    });
+
+    document.addEventListener('click', (e)=>{
+      const target = e.target;
+      if(window.innerWidth <= 640){
+        if(!mainNav.contains(target) && !menuToggle.contains(target)){
+          mainNav.style.display = '';
+          menuToggle.setAttribute('aria-expanded','false');
+        }
+      }
+    });
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', ()=>{
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('tapingoolf_theme', isDark ? 'dark' : 'light');
+    });
+
+    function init(){
+      const savedTheme = localStorage.getItem('tapingoolf_theme');
+      if(savedTheme==='dark'){ document.body.classList.add('dark'); themeToggle.textContent='☀️' }
+      renderProducts();
+      updateCart();
+      updateReviewCount();
+      observeFadeIns();
+      initHeroParallax();
+      initScrollBehaviors();
+      hookImageErrors();
+    }
+
+    function hookImageErrors(){
+      document.querySelectorAll('.product img, .gallery img').forEach(img=>{
+        if(img.dataset.errorBound) return;
+        img.dataset.errorBound = '1';
+        img.addEventListener('error', ()=> img.src = 'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width=\"800\" height=\"500\"><rect width=\"100%\" height=\"100%\" fill=\"%23ddd\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"%23888\" font-family=\"Arial\" font-size=\"20\">Bild saknas</text></svg>');
+      });
+    }
+
+    let fadeObserver = null;
+    function observeFadeIns(){
+      const items = document.querySelectorAll('.fade-in');
+      if('IntersectionObserver' in window){
+        if(!fadeObserver){
+          fadeObserver = new IntersectionObserver((entries)=>{
+            entries.forEach(ent=>{
+              if(ent.isIntersecting){
+                ent.target.classList.add('inview');
+                fadeObserver.unobserve(ent.target);
+              }
+            });
+          }, { threshold: 0.12 });
+        }
+        items.forEach(i=> fadeObserver.observe(i));
+      } else {
+        items.forEach(i=> i.classList.add('inview'));
+      }
+    }
+
+    function initHeroParallax(){
+      const heroBg = document.getElementById('heroBg');
+      const heroInner = document.getElementById('heroInner');
+      function onScroll(){
+        const sc = window.scrollY;
+        heroBg.style.transform = `translateY(${sc * 0.2}px) scale(1.02)`;
+        heroInner.style.transform = `translateY(${Math.min(sc * 0.06, 24)}px)`;
+      }
+      window.addEventListener('scroll', throttle(onScroll, 16));
+      onScroll();
+    }
+
+    function initScrollBehaviors(){
+      const header = document.getElementById('siteHeader');
+      const toTop = document.getElementById('toTop');
+      let lastScroll = 0;
+      window.addEventListener('scroll', throttle(()=>{
+        const y = window.scrollY;
+        if(y > 60){ header.classList.add('shrink') }
+        else { header.classList.remove('shrink') }
+        if(y > 300){ toTop.style.display = 'flex'; }
+        else { toTop.style.display = 'none'; }
+        lastScroll = y;
+      }, 50));
+      toTop.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+    }
+
+    function throttle(fn, wait){
+      let last = 0;
+      return function(...args){
+        const now = Date.now();
+        if(now - last >= wait){ last = now; fn.apply(this,args); }
+      }
+    }
+
+    init();
+
+    document.getElementById('overlay').addEventListener('click', (e)=>{
+      if(e.target.id === 'overlay') closeReviewPopup();
+    });
+
+    window.addToCart = addToCart;
+    window.removeFromCart = removeFromCart;
+    window.openReviewPopup = openReviewPopup;
+    window.closeReviewPopup = closeReviewPopup;
+    window.submitReview = submitReview;
+    window.showAllReviews = showAllReviews;
+    window.showProductInfo = showProductInfo;
+  </script>
+</body>
+</html>
